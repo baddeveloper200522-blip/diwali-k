@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Diwali, Komal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,500&family=Nunito:wght@400;700&display=swap">
+<style>
+
+:root{--night:#14061f;--plum:#2d0f42;--gold:#ffb627;--saffron:#ff7a1a;--rose:#ff4d79;--cream:#fff3d6;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,var(--plum),var(--night) 70%);color:var(--cream);
+ font:17px/1.6 Nunito,system-ui,sans-serif;overflow-x:hidden;text-align:center}
+#sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+main{position:relative;z-index:2;max-width:640px;margin:0 auto;padding:48px 20px 80px}
+h1{font:600 clamp(2.6rem,11vw,4.6rem)/1.05 Fraunces,Georgia,serif;margin:0 0 6px;color:var(--gold);text-shadow:0 0 28px rgba(255,150,30,.45)}
+h1 em{font-style:italic;color:var(--rose)}
+.sub{opacity:.85;margin:0 0 28px}
+.diyas{display:flex;justify-content:center;gap:clamp(6px,3vw,18px);margin:10px 0 8px}
+.diya{background:none;border:0;padding:0;cursor:pointer;width:clamp(52px,15vw,84px);position:relative;color:inherit;-webkit-tap-highlight-color:transparent}
+.diya:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:12px}
+.diya svg{width:100%;display:block;overflow:visible}
+.flame{opacity:0;transform-origin:50% 100%;transform:scale(.2);transition:opacity .4s,transform .4s}
+.glow{opacity:0;transition:opacity .6s}
+.diya.lit .flame{opacity:1;transform:scale(1);animation:flick 1.3s ease-in-out infinite alternate}
+.diya.lit .glow{opacity:1}
+@keyframes flick{to{transform:scale(1.08,.94) rotate(2deg)}}
+.hint{font-size:.95rem;opacity:.8;min-height:1.6em;margin:0 0 20px}
+.letter{max-height:0;opacity:0;overflow:hidden;transition:max-height 1.2s ease,opacity 1s ease;background:rgba(255,243,214,.07);border:1px solid rgba(255,182,39,.35);border-radius:22px}
+.letter.show{max-height:900px;opacity:1;margin-top:8px}
+.letter div{padding:26px 24px}
+.letter h2{font:italic 500 1.7rem Fraunces,Georgia,serif;color:var(--gold);margin:0 0 10px}
+.letter p{margin:0 0 12px;text-align:left}
+.sign{text-align:right!important;font-family:Fraunces,Georgia,serif;font-style:italic;color:var(--rose)}
+section{margin-top:44px}
+h3{font:600 1.5rem Fraunces,Georgia,serif;color:var(--gold);margin:0 0 12px}
+button.btn{font:700 1rem Nunito,sans-serif;color:#2a0b00;background:linear-gradient(135deg,var(--gold),var(--saffron));border:0;border-radius:999px;padding:12px 26px;cursor:pointer;box-shadow:0 6px 22px rgba(255,122,26,.35);transition:transform .15s}
+button.btn:hover{transform:translateY(-2px)}
+button.btn:focus-visible{outline:3px solid var(--cream);outline-offset:3px}
+button.btn.alt{background:rgba(255,243,214,.12);color:var(--cream);box-shadow:none;border:1px solid rgba(255,243,214,.35)}
+.card{min-height:5.2em;margin:18px auto 0;padding:18px 20px;border-radius:18px;background:rgba(255,77,121,.14);border:1px dashed var(--rose);font-size:1.1rem}
+.ask{position:relative;height:150px}
+.ask .row{position:absolute;inset:auto 0 0 0;display:flex;justify-content:center;gap:16px}
+#no{position:absolute;left:50%;bottom:0;transition:left .25s,bottom .25s;white-space:nowrap}
+#yes{position:absolute;right:50%;bottom:0;margin-right:10px}
+.meter{height:16px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin:16px auto 8px;max-width:420px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--gold));transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+#game{width:100%;max-width:320px;aspect-ratio:320/420;background:rgba(255,243,214,.06);border:1px solid rgba(255,182,39,.35);border-radius:20px;display:block;margin:14px auto}
+#gameHud{font-weight:700;color:var(--gold);min-height:1.6em}
+#gameMsg{min-height:3.2em;margin-top:8px}
+footer{margin-top:50px;opacity:.7;font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.diya.lit .flame{animation:none}html{scroll-behavior:auto}}
+
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<main>
+  <h1>Happy Diwali,<br><em>Komal</em></h1>
+  <p class="sub">I made you a small corner of the internet, lit by five diyas.</p>
+
+  <div class="diyas" id="diyas"></div>
+  <p class="hint" id="hint">Tap each diya to light it.</p>
+
+  <div class="letter" id="letter"><div>
+    <h2>My love, my Komal,</h2>
+    <p>Every diya is a little promise that the dark never wins. You are the reason my days feel lit, even the ordinary ones.</p>
+    <p>This Diwali I wish you a home full of light, a heart full of laughter, a table full of sweets (I’ll steal the best ladoo), and me, right beside you.</p>
+    <p>May every year ahead glow a little brighter than this one.</p>
+    <p class="sign">Forever yours, with all my love</p>
+  </div></div>
+
+  <section>
+    <h3>Today’s Diwali wish for you</h3>
+    <button class="btn" id="wishBtn">Open a wish</button>
+    <div class="card" id="wish">Tap the button for a surprise.</div>
+  </section>
+
+  <section>
+    <h3>How much do I love you?</h3>
+    <button class="btn alt" id="meterBtn">Measure it</button>
+    <div class="meter"><i id="bar"></i></div>
+    <div id="meterTxt" aria-live="polite">Press the button to find out.</div>
+  </section>
+
+  <section>
+    <h3>One important question</h3>
+    <p>Will you celebrate every Diwali with me?</p>
+    <div class="ask">
+      <button class="btn" id="yes">Yes, always</button>
+      <button class="btn alt" id="no">No</button>
+    </div>
+    <div id="answer" aria-live="polite"></div>
+  </section>
+
+  <section>
+    <h3>Catch the Diwali diyas</h3>
+    <p>Slide the basket with your finger, mouse or arrow keys. Catch diyas (+1) and sweets (+2). Dodge the crackers: 3 hits and it’s over. You have 30 seconds.</p>
+    <div id="gameHud" aria-live="polite">Score 0 · Time 30 · Lives 3</div>
+    <canvas id="game" aria-label="Diya catching game"></canvas>
+    <button class="btn" id="gameBtn">Start the game</button>
+    <div id="gameMsg" aria-live="polite"></div>
+  </section>
+
+  <section>
+    <button class="btn" id="boom">Light the sky</button>
+    <p class="hint">Tip: tap anywhere on the page for crackers.</p>
+  </section>
+
+  <footer>Made with love, for Komal</footer>
+</main>
+
+<script>
+
+(function(){
+  var cv=document.getElementById('sky'),cx=cv.getContext('2d'),W,H,parts=[];
+  function size(){var d=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0)}
+  size();addEventListener('resize',size);
+  var cols=['#ffb627','#ff7a1a','#ff4d79','#fff3d6','#ffd966','#ff8fb1'];
+  function burst(x,y){
+    var c=cols[Math.floor(Math.random()*cols.length)],n=46;
+    for(var i=0;i<n;i++){var a=Math.PI*2*i/n,s=1.5+Math.random()*3.2;
+      parts.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,c:Math.random()<.3?'#fff3d6':c})}
+  }
+  function show(k){for(var i=0;i<k;i++)setTimeout(function(){burst(W*(.15+Math.random()*.7),H*(.12+Math.random()*.4))},i*260)}
+  function tick(){
+    cx.clearRect(0,0,W,H);
+    for(var i=parts.length-1;i>=0;i--){var p=parts[i];
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.045;p.vx*=.985;p.life-=.012;
+      if(p.life<=0){parts.splice(i,1);continue}
+      cx.globalAlpha=p.life;cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,2.2*p.life+.4,0,6.3);cx.fill()}
+    cx.globalAlpha=1;requestAnimationFrame(tick)
+  }
+  tick();
+  addEventListener('pointerdown',function(e){
+    if(e.target.closest('.diya,button'))return;burst(e.clientX,e.clientY)});
+
+  // Diyas
+  var box=document.getElementById('diyas'),lit=0,total=5,hint=document.getElementById('hint');
+  var svg='<svg viewBox="0 0 100 90" aria-hidden="true"><ellipse class="glow" cx="50" cy="38" rx="46" ry="38" fill="rgba(255,160,30,.28)"/>'
+   +'<g class="flame"><path d="M50 8 C62 24 66 34 50 50 C34 34 38 24 50 8Z" fill="#ff7a1a"/><path d="M50 22 C57 32 58 38 50 46 C42 38 43 32 50 22Z" fill="#ffe27a"/></g>'
+   +'<path d="M8 52 Q50 98 92 52 Q50 60 8 52Z" fill="#c4521a"/><path d="M8 52 Q50 60 92 52 Q50 46 8 52Z" fill="#7a2a0c"/>'
+   +'<circle cx="50" cy="52" r="2.5" fill="#ffb627"/><path d="M26 62 Q50 78 74 62" stroke="#ffb627" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="1 7"/></svg>';
+  for(var i=0;i<total;i++){
+    var b=document.createElement('button');b.className='diya';b.type='button';b.setAttribute('aria-label','Light diya '+(i+1));b.innerHTML=svg;
+    b.addEventListener('click',function(e){
+      if(this.classList.contains('lit'))return;
+      this.classList.add('lit');lit++;
+      var r=this.getBoundingClientRect();burst(r.left+r.width/2,r.top);
+      if(lit<total){hint.textContent=lit+' of '+total+' lit. Keep going.'}
+      else{hint.textContent='Every diya is glowing. Happy Diwali, my love.';
+        document.getElementById('letter').classList.add('show');show(7);
+        setTimeout(function(){document.getElementById('letter').scrollIntoView({behavior:'smooth',block:'center'})},500)}
+    });
+    box.appendChild(b);
+  }
+
+  // Wishes
+  var wishes=[
+    'May your Diwali shine as bright as your smile, Komal.',
+    'Wishing you sweets without calories and a hug without end.',
+    'You are my favourite light, brighter than every diya tonight.',
+    'May our love glow like a diya that never goes out.',
+    'Lakshmi ji bless you with happiness. I’ll bless you with all my love.',
+    'Another Diwali, another reason to thank the universe for you.',
+    'Rangoli, lights, ladoos and you. Perfect.',
+    'May this festival bring you everything your heart quietly wishes for.'];
+  var wi=-1;
+  document.getElementById('wishBtn').onclick=function(){
+    var n;do{n=Math.floor(Math.random()*wishes.length)}while(n===wi);wi=n;
+    document.getElementById('wish').textContent=wishes[n];burst(W/2,H*.35);this.textContent='Another wish'};
+
+  // Love meter
+  var steps=['Loading love…','Already 50%… still going…','100%? Not even close.','Overflow detected.','Result: infinity, and growing every day.'];
+  document.getElementById('meterBtn').onclick=function(){
+    var bar=document.getElementById('bar'),t=document.getElementById('meterTxt');bar.style.width='100%';
+    steps.forEach(function(s,i){setTimeout(function(){t.textContent=s},i*700)});
+    setTimeout(function(){show(4)},3000)};
+
+  // Runaway No
+  var no=document.getElementById('no');
+  function dodge(e){if(e&&e.preventDefault)e.preventDefault();
+    no.style.left=(20+Math.random()*60)+'%';no.style.bottom=(Math.random()*90)+'px';no.style.transform='translateX(-50%)'}
+  no.addEventListener('mouseenter',dodge);no.addEventListener('touchstart',dodge,{passive:false});no.addEventListener('click',dodge);
+  document.getElementById('yes').onclick=function(){
+    document.getElementById('answer').innerHTML='<div class="card">I knew it. Happy Diwali, Komal. Every year, every diya, always you.</div>';
+    no.style.display='none';show(10)};
+
+  document.getElementById('boom').onclick=function(){show(9)};
+  setTimeout(function(){burst(W*.5,H*.25)},600);
+
+  // Game: catch the diyas
+  var g=document.getElementById('game'),gx=g.getContext('2d'),GW=320,GH=420,hud=document.getElementById('gameHud'),gm=document.getElementById('gameMsg'),gb=document.getElementById('gameBtn');
+  g.width=GW;g.height=GH;
+  var gs={on:false,score:0,time:30,lives:3,bx:GW/2,items:[],last:0,spawn:0,best:0};
+  var types=[{e:'🪔',p:1},{e:'🍬',p:2},{e:'💥',p:-1}];
+  function gpos(x){var r=g.getBoundingClientRect();gs.bx=Math.max(30,Math.min(GW-30,(x-r.left)/r.width*GW))}
+  g.addEventListener('pointermove',function(e){gpos(e.clientX)});
+  g.addEventListener('pointerdown',function(e){gpos(e.clientX)});
+  addEventListener('keydown',function(e){if(!gs.on)return;
+    if(e.key==='ArrowLeft'){e.preventDefault();gs.bx=Math.max(30,gs.bx-26)}
+    if(e.key==='ArrowRight'){e.preventDefault();gs.bx=Math.min(GW-30,gs.bx+26)}});
+  function drawBasket(){gx.font='38px serif';gx.textAlign='center';gx.textBaseline='middle';gx.fillText('🧺',gs.bx,GH-30)}
+  function gEnd(){
+    gs.on=false;g.style.touchAction='';gb.textContent='Play again';gb.disabled=false;
+    if(gs.score>gs.best)gs.best=gs.score;
+    var s=gs.score,m=s>=30?'Legend! Komal, you caught the whole festival. You are my Diwali champion.':s>=18?'Wow, so good! Lakshmi ji is smiling at you today.':s>=8?'Nice catch! One more round and you’ll beat this.':'Cute try! Even the crackers are scared of you. Play again?';
+    gm.textContent='Final score '+s+' (best '+gs.best+'). '+m;
+    if(s>=18)show(9);else burst(W/2,H*.4);
+  }
+  function gLoop(t){
+    if(!gs.on)return;
+    var dt=Math.min(.05,(t-gs.last)/1000||0);gs.last=t;
+    gs.time-=dt;gs.spawn-=dt;
+    if(gs.spawn<=0){gs.spawn=.55;var r=Math.random()*10,ty=r<5?types[0]:r<8?types[1]:types[2];
+      gs.items.push({x:25+Math.random()*(GW-50),y:-20,v:110+Math.random()*80+(30-gs.time)*4,t:ty})}
+    gx.clearRect(0,0,GW,GH);gx.font='30px serif';gx.textAlign='center';gx.textBaseline='middle';
+    for(var i=gs.items.length-1;i>=0;i--){var it=gs.items[i];it.y+=it.v*dt;
+      if(it.y>GH-52&&it.y<GH-8&&Math.abs(it.x-gs.bx)<38){
+        if(it.t.p>0){gs.score+=it.t.p}else{gs.lives--}
+        gs.items.splice(i,1);continue}
+      if(it.y>GH+20){gs.items.splice(i,1);continue}
+      gx.fillText(it.t.e,it.x,it.y)}
+    drawBasket();
+    hud.textContent='Score '+gs.score+' · Time '+Math.max(0,Math.ceil(gs.time))+' · Lives '+Math.max(0,gs.lives);
+    if(gs.time<=0||gs.lives<=0){gEnd();return}
+    requestAnimationFrame(gLoop)
+  }
+  gb.onclick=function(){
+    gs.score=0;gs.time=30;gs.lives=3;gs.items=[];gs.spawn=0;gs.bx=GW/2;gs.on=true;gs.last=performance.now();
+    g.style.touchAction='none';gb.disabled=true;gm.textContent='';requestAnimationFrame(gLoop)};
+  drawBasket();
+})();
+
+</script>
+</body>
+</html>
